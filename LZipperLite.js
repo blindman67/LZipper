@@ -5,6 +5,7 @@
 // var compressed = LZipper.compress(data);  
 // var uncompressed = LZipper.decompress(compressed);
 
+
 var LZipper = (function () {
     var fcc, API;
     // just shorthand from char code.
@@ -40,23 +41,24 @@ var LZipper = (function () {
         }
         var i, ii, f,c,w,wc,enlargeIn,dictSize,numBits,str,val,pos,len;
         len = data.length;        
-        dic = new Map();  // dictionary 
+        dic = {};
         c = w = wc = "";
         w = "";
         enlargeIn = numBits = 2;
         dictSize = 3;
         str = "";
         val = pos = 0;
+
         for (ii = 0; ii < len; ii += 1) {
             c = data.charAt(ii);
-            if (!dic.has(c)) {
-                dic.set(c,{size:dictSize++,create:true});
+            if (dic[c] === undefined) {
+                dic[c] = {size:dictSize++,create:true};
             }
             wc = w + c;
-            if (dic.has(wc)) {
+            if (dic[wc] !== undefined) {
                 w = wc;
             } else {
-                if (dic.has(w) && dic.get(w).create) {
+                if (dic[w].create) {
                     if (w.charCodeAt(0) < 256) {
                         dec(numBits, 0);
                         dec(8, w.charCodeAt(0));
@@ -69,25 +71,25 @@ var LZipper = (function () {
                         enlargeIn = Math.pow(2, numBits);
                         numBits++;
                     }
-                    dic.get(w).create = false;
+                    dic[w].create = false;
                 } else {
-                    dec(numBits, dic.get(w).size);
+                    dec(numBits, dic[w].size);
                 }
                 enlargeIn--;
                 if (enlargeIn === 0) {
                     enlargeIn = Math.pow(2, numBits);
                     numBits++;
                 }
-                if(dic.has(wc)){
-                    dic.get(wc).size = dictSize++;
+                if(dic[wc] !== undefined){
+                    dic[wc].size = dictSize++;
                 }else{
-                    dic.set(wc,{size:dictSize++,create:false});
+                    dic[wc] = {size:dictSize++,create:false};
                 }
                 w = String(c);
             }
         }
         if (w !== "") {
-            if (dic.has(w) && dic.get(w).create) {
+            if (dic[w].create) {
                 if (w.charCodeAt(0) < 256) {
                     dec(numBits, 0);
                     dec(8, w.charCodeAt(0));
@@ -100,9 +102,9 @@ var LZipper = (function () {
                     enlargeIn = Math.pow(2, numBits);
                     numBits++;
                 }
-                dic.get(w).create = false;
+                dic[w].create = false;
             } else {
-                dec(numBits, dic.get(w).size);
+                dec(numBits, dic[w].size);
             }
             enlargeIn--;
             if (enlargeIn === 0) {

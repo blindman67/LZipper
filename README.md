@@ -6,14 +6,16 @@
 
 - Light weight LZipper.min.js 1.9K
 - Easy to use.
+- Fast LZipperLite.js is faster than any LZW JavaScript compression I have tested so far.
 
 ## Status
 
 First release for ECMAScript6
+Added LZipperLite that is compatible with ECMAScript5
 
 ## Including it in you project
 
-Simlply add `LZipper.js` or `LZipper.min.js` into your existing js code. Or add the following to your page
+Simply add `LZipper.js` or `LZipper.min.js` into your existing js code. Or add the following to your page
 
 ```
 <script src="LZipper.min.js"></script>
@@ -23,8 +25,10 @@ Simlply add `LZipper.js` or `LZipper.min.js` into your existing js code. Or add 
 
 LZipper.js as the object `LZipper` to the global namespace providing two functions 
 
+```
 String = LZipper.compress(String);
 String = LZipper.decompress(String)
+```
 
 Methods.
 
@@ -44,18 +48,23 @@ an uncompressed string.
 
 LZipper is handy for storing data in localStorage
 
+Save to local storage.
+```
 // myObject represents a javascript object.
 localStorage.myData = LZipper.compress ( JSON.stringify (myObject) ); // save compress JSON to local storage
+```
 
-// Retrieval
+Retrieval.
+```
 var myObject;
 if (localStorage.myData !== undefined) {
     myObject = JSON.parse ( LZipper.decompress ( localStorage.myData ));
 }
-    
+```    
 ## Current limitations.
 
 Requires JavaScript `Map` object. If 'Map' is not available LZipper simple does not compress the string but will not fail.
+LZipperLite compress performs 20% faster than LZipper
 
 
 
