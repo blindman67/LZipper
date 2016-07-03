@@ -39,7 +39,7 @@ var LZipper = (function () {
         if (data === null || data === undefined || data === "") {
             return "";
         }
-        var i, ii, f,c,w,wc,enlargeIn,dictSize,numBits,str,val,pos,len;
+        var i, ii, f,c,w,wc,enlargeIn,dictSize,numBits,str,val,pos,len,dic;
         len = data.length;        
         dic = {};
         c = w = wc = "";
