@@ -14,6 +14,33 @@ var LZipper = (function () {
         compress : function( str ){ return str; },
         decompress : function( str ){ return str; },    
     };    
+    // converts a 16 bit javascript string 8 bit encoded string so that it can be converted to Base64
+    function data16to8Bit(str){
+        var i, outStr, len, c;
+        outStr = "";
+        len = str.length;
+        for(i = 0; i < len; i++){
+            c = str.charCodeAt(i);
+            outStr += String.fromCharCode((c >> 8) & 0xFF);
+            outStr += String.fromCharCode(c & 0xff);
+        }
+        return outStr;
+    }
+    // converts a 8 bit encoded string 16 bit javascript string.
+    function data8to16Bit(str){
+        var i, outStr, len, c;
+        outStr = "";
+        len = str.length;
+        for(i = 0; i < len; i++){
+            c = (str.charCodeAt(i) & 0xFF) << 8;
+            i ++;
+            if(i < len){
+                c += str.charCodeAt(i) & 0xFF;
+            }
+            outStr += String.fromCharCode(c);
+        }
+        return outStr;
+    }    
     // function compress data
     // data is a string
     // returns a string
@@ -202,5 +229,7 @@ var LZipper = (function () {
         API.compress = compress;
         API.decompress = decompress;
     }
+    API.int2Char = data16to8Bit;
+    API.char2Int = data8to16Bit;    
     return API;
 })();
